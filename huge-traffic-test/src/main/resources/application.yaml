@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: huge-traffic-test
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hugetraffic
+    username: user1
+    password: 1234
