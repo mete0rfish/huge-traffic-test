@@ -13,6 +13,6 @@ class Coupon (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    var userId: Long = 0L,
+    var userId: Long? = 0L,
     var issuedDate: LocalDateTime = LocalDateTime.now()
 )
