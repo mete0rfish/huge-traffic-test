@@ -4,6 +4,7 @@ import com.mete0rfish.huge_traffic_test.entity.Coupon
 import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Lock
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
@@ -14,4 +15,7 @@ interface CouponRepository : JpaRepository<Coupon, Long> {
     @Query("select count(c) from Coupon c")
     fun countWithLock(): Long
 
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Coupon c SET c.userId = :userId, c.issuedDate = NOW() WHERE c.id = :couponId")
+    fun assignCoupon(couponId: Long, userId: Long): Int
 }

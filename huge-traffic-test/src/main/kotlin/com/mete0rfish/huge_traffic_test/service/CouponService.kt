@@ -4,12 +4,16 @@ import com.mete0rfish.huge_traffic_test.entity.Coupon
 import com.mete0rfish.huge_traffic_test.exception.CouponEventFinishedException
 import com.mete0rfish.huge_traffic_test.repository.CouponCountRepository
 import com.mete0rfish.huge_traffic_test.repository.CouponRepository
+import org.springframework.data.redis.connection.stream.StreamRecords
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
 class CouponService(
+    private val redisTemplate: RedisTemplate<String, String>,
+    private val couponAssignmentService: CouponAssignmentService,
     private val couponRepository: CouponRepository,
     private val couponCountRepository: CouponCountRepository
 ) {
@@ -37,4 +41,5 @@ class CouponService(
             throw CouponEventFinishedException("마감되었습니다.")
         }
     }
+
 }
