@@ -73,4 +73,9 @@ class CouponServiceTest @Autowired constructor(
         println("count: $count")
         assertThat(count).isEqualTo(100)
     }
+
+    @Test
+    fun `메시지 큐를 이용하여 쿠폰을 발급한다`() {
+
+    }
 }

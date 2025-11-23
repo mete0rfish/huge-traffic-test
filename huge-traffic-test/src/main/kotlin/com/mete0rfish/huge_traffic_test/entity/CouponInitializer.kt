@@ -14,7 +14,7 @@ class CouponInitializer(
     private val jdbcTemplate: JdbcTemplate
 ) {
 
-    private val COUNT_KEY = "coupon:available:count"
+    private val COUNT_KEY = "coupon:issued:count"
     private val USER_KEY = "coupon:issued:user"
 
     fun initEvent(limitCount: Int) {
@@ -44,8 +44,19 @@ class CouponInitializer(
     }
 
     fun initEventOnlyCouponCount(count: Int) {
+        couponRepository.deleteAll();
+
+        val sql = "INSERT INTO coupons (id, issued_date, user_id) VALUES (?, NULL, NULL)"
+        jdbcTemplate.batchUpdate(sql, object: BatchPreparedStatementSetter {
+            override fun setValues(ps: PreparedStatement, i: Int) {
+                ps.setLong(1, (i+1).toLong())
+            }
+
+            override fun getBatchSize(): Int  = count
+        })
+
         redisTemplate.delete(listOf(COUNT_KEY, USER_KEY))
-        redisTemplate.opsForValue().set(COUNT_KEY, count.toString())
+        redisTemplate.opsForValue().set(COUNT_KEY, "0")
 
         println("==== 쿠폰 이벤트 초기화 완료 ====")
         println("발행 수량: $count 개")

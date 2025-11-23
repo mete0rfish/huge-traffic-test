@@ -3,7 +3,7 @@ package com.mete0rfish.huge_traffic_test.controller
 import com.mete0rfish.huge_traffic_test.entity.CouponInitializer
 import com.mete0rfish.huge_traffic_test.repository.CouponRepository
 import com.mete0rfish.huge_traffic_test.service.CouponRedisService
-import com.mete0rfish.huge_traffic_test.service.CouponRedisStreamService
+import com.mete0rfish.huge_traffic_test.service.CouponRedisPubSubService
 import com.mete0rfish.huge_traffic_test.service.CouponService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class CouponController(
     private val couponService: CouponService,
     private val couponRedisService: CouponRedisService,
-    private val couponRedisStreamService: CouponRedisStreamService,
+    private val couponRedisPubSubService: CouponRedisPubSubService,
     private val couponRepository: CouponRepository,
     private val couponInitializer: CouponInitializer
 ) {
@@ -36,7 +36,7 @@ class CouponController(
 
     @PostMapping("/issue-redis-stream")
     fun issueWithQueue(@RequestParam userId: Long): String {
-        couponRedisStreamService.issueWithQueue(userId)
+        couponRedisPubSubService.issueWithPipeline(userId)
         return "발급 요청 완료"
     }
 
